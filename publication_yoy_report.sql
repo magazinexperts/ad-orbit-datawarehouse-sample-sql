@@ -22,7 +22,7 @@ orders_fact.probability,
 dim_adsize.ad_size_name,
 sales_fact.net
 */
-FROM magazinexperts_dw.dim_order_item
+FROM dim_order_item
 LEFT JOIN orders_fact on dim_order_item.order_number=orders_fact.order_id
 LEFT JOIN sales_fact ON dim_order_item.line_item_key=sales_fact.line_item_key
 LEFT JOIN dim_issue ON sales_fact.issue_id=dim_issue.issue_id
