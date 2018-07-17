@@ -7,6 +7,8 @@ One example would be to provide statistics against tickets, if you use a self-ho
 
 Another example would be to use MySql's own stored prodecures and event scheduler to do summarization in custom tables without an extra software.
 
+You may also consier a Federated table when you want to create custom views, as Data Warehouse does not allow creation of custom views.
+
 Yet another example of Federated table's usefulness for Data Warehouse is to be able to access Data Warehouse through more services that don't support Mysql over SSH, without adding additional IPs to your account.
 
 ## Server Setup
