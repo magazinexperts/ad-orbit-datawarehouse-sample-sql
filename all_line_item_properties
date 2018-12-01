@@ -1,0 +1,38 @@
+
+/*
+This query is designed to link all possible data to the line item, from the company, to the invoice, to publication, issue, and section.
+This report could be modified to show many things such as uninvoiced line items; all invoiced items; all tickets; all revenue by month with payment status and much more.
+*/
+SELECT
+*
+FROM dim_order_item
+LEFT JOIN orders_fact ON dim_order_item.order_number=orders_fact.order_id
+LEFT JOIN sales_fact ON dim_order_item.line_item_key=sales_fact.line_item_key
+LEFT JOIN dim_issue ON sales_fact.issue_id=dim_issue.issue_id
+LEFT JOIN dim_publication ON sales_fact.pub_id=dim_publication.pub_id
+LEFT JOIN dim_company ON sales_fact.company_id=dim_company.company_id
+LEFT JOIN dim_position ON sales_fact.position_id=dim_position.position_id
+LEFT JOIN dim_section ON sales_fact.section_id=dim_section.section_id
+LEFT JOIN dim_channel ON sales_fact.d_channel_id=dim_channel.d_channel_id
+LEFT JOIN dim_service ON sales_fact.service_id=dim_service.service_id
+LEFT JOIN dim_invoice ON sales_fact.line_item_key=dim_invoice.line_item_key
+LEFT JOIN payment_fact ON dim_invoice.invoice_key=payment_fact.invoice_key
+LEFT JOIN invoice_fact ON dim_invoice.invoice_id=invoice_fact.invoice_id
+LEFT JOIN dim_payment_method ON payment_fact.method_id=dim_payment_method.method_id
+#LEFT JOIN dim_company bc ON invoice_fact.billing_company_id=dim_company.company_id
+WHERE  dim_order_item.dead = 0
+AND sales_fact.probability = 100
+AND orders_fact.dead = 0
+AND (
+	(dim_order_item.order_type = 'ad' AND dim_issue.dead = 0)
+OR
+	(dim_order_item.order_type = 'service')
+)
+
+#payment_fact.dead = 0
+#AND dim_invoice.dead = 0
+#AND invoice_fact.dead = 0
+#AND dim_publication.dead = 0
+#AND dim_publication.name = ''
+#ORDER BY invoice_fact.cash_due DESC
+LIMIT 50000
