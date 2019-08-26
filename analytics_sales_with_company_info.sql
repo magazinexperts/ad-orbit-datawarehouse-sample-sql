@@ -1,0 +1,3 @@
+SELECT * FROM analytics_sales
+LEFT JOIN dim_order_item ON analytics_sales.line_item_key=dim_order_item.line_item_key
+LEFT JOIN analytics_company_attributes ON dim_order_item.company_id=analytics_company_attributes.company_id
