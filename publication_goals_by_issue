@@ -1,0 +1,6 @@
+SELECT dim_issue.*, SUM(goal_amount) as 'goal_amount' FROM dim_issue_goal
+LEFT JOIN dim_issue on dim_issue_goal.issue_id=dim_issue.issue_id
+WHERE dim_issue_goal.dead = 0
+AND dim_issue.dead = 0
+AND dim_issue.report_date BETWEEN '2019-01-01' AND '2019-12-31'
+GROUP BY dim_issue_goal.issue_id
