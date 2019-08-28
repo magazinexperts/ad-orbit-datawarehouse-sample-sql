@@ -1,9 +1,3 @@
-/*
-Notes:
-Total 100% reflects only orders at 100%;
-Total Potential Cash shows the non-weighted total of all orders and forecasts
-Weighted Cash shows the weighted sum of sales and orders.
-*/
 SELECT
 dim_publication.name as 'Publication',
 dim_issue.iss_name as 'Issue',
@@ -25,6 +19,7 @@ from (
 	FROM magazinexperts_dw.sales_fact
 	where dead = 0
 	AND net > 0
+	AND pub_id = 2
 
 	UNION ALL
 
@@ -44,11 +39,13 @@ from (
 	WHERE dead = 0
     AND dim_confidence.confidence_percentage != 0
     AND cash > 0
+    AND pub_id = 2
 ) all_sales_data
 LEFT JOIN dim_issue ON all_sales_data.issue_id=dim_issue.issue_id
 LEFT JOIN dim_publication ON dim_issue.pub_id=dim_publication.pub_id
 WHERE dim_publication.dead = 0
 AND dim_issue.dead = 0
+AND dim_publication.pub_id = 2
 AND dim_issue.report_date BETWEEN '2019-01-01' AND '2019-12-31'
 GROUP BY dim_issue.issue_id
 ORDER BY dim_publication.name, dim_issue.report_date ASC
